@@ -30,7 +30,7 @@ class TopUpRequest(models.Model):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topup_requests')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    screenshot = models.ImageField(upload_to='payment_proofs/')
+    transaction_reference = models.CharField(max_length=4, help_text="Last 4 digits of Transaction ID")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     admin_note = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

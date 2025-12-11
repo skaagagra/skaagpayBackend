@@ -37,6 +37,8 @@ class AdminLoginView(views.APIView):
         phone_number = request.data.get('phone_number')
         password = request.data.get('password')
 
+        full_name = request.data.get('full_name')
+
         if not phone_number or not password:
             return Response({'error': 'Please provide phone number and password'}, status=status.HTTP_400_BAD_REQUEST)
 

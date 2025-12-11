@@ -11,7 +11,7 @@ class TopUpRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TopUpRequest
-        fields = ('id', 'user_phone', 'amount', 'screenshot', 'status', 'created_at')
+        fields = ('id', 'user_phone', 'amount', 'transaction_reference', 'status', 'created_at')
         read_only_fields = ('id', 'status', 'created_at')
 
 class TransactionSerializer(serializers.ModelSerializer):

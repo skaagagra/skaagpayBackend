@@ -8,8 +8,8 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-phone = "9999999999"
-password = "adminpassword"
+phone = "8335811533"
+password = "12345678"
 
 if not User.objects.filter(phone_number=phone).exists():
     User.objects.create_superuser(phone_number=phone, full_name="Admin User", password=password)
