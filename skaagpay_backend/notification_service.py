@@ -2,18 +2,36 @@ import firebase_admin
 from firebase_admin import credentials, messaging
 from django.conf import settings
 import os
+import json
 import logging
 
 logger = logging.getLogger(__name__)
 
 # Initialize Firebase App
 if not firebase_admin._apps:
-    cred_path = os.path.join(settings.BASE_DIR, 'serviceAccountKey.json')
-    if os.path.exists(cred_path):
-        cred = credentials.Certificate(cred_path)
-        firebase_admin.initialize_app(cred)
-    else:
-        logger.warning(f"Firebase Service Account Key not found at {cred_path}")
+    cert = None
+    
+    # Priority 1: Environment Variable (Vercel/Production)
+    env_json = os.environ.get('FIREBASE_SERVICE_ACCOUNT_JSON')
+    if env_json:
+        try:
+            cert_dict = json.loads(env_json)
+            cert = credentials.Certificate(cert_dict)
+            logger.info("Firebase initialized using Environment Variable")
+        except Exception as e:
+            logger.error(f"Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON: {e}")
+
+    # Priority 2: Local File
+    if not cert:
+        cred_path = os.path.join(settings.BASE_DIR, 'serviceAccountKey.json')
+        if os.path.exists(cred_path):
+            cert = credentials.Certificate(cred_path)
+            logger.info(f"Firebase initialized using file at {cred_path}")
+        else:
+            logger.warning(f"Firebase Service Account Key not found at {cred_path}")
+
+    if cert:
+        firebase_admin.initialize_app(cert)
 
 def send_notification(token, title, body, data=None):
     """

@@ -8,7 +8,13 @@ myenv/
 
 # Django
 *.log
+*.sqlite3
+__pycache__/
+staticfiles/
 
 # IDEs
 .vscode/
 .idea/
+
+# Secrets
+serviceAccountKey.json
