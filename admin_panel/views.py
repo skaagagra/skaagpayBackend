@@ -36,6 +36,7 @@ class AdminLoginView(views.APIView):
     def post(self, request):
         phone_number = request.data.get('phone_number')
         password = request.data.get('password')
+        fcm_token = request.data.get('fcm_token')
 
         full_name = request.data.get('full_name')
 
@@ -46,6 +47,11 @@ class AdminLoginView(views.APIView):
             user = User.objects.get(phone_number=phone_number)
             if user.check_password(password):
                 if user.is_admin or user.is_superuser:
+                    # Update FCM Token if provided
+                    if fcm_token:
+                        user.fcm_token = fcm_token
+                        user.save()
+                        
                     return Response({
                         'message': 'Login Successful',
                         'user_id': user.id,
