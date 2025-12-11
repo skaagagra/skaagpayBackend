@@ -19,11 +19,32 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Swagger / OpenAPI Dependencies
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="SkaagPay API Docs",
+      default_version='v1',
+      description="API Documentation for SkaagPay Backend (Authentication, Wallet, Recharge, Admin Panel)",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="admin@skaagpay.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 urlpatterns = [
+    # Swagger Documentation (Home Page)
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
     path('admin/', admin.site.urls),
     path('api/auth/', include('authentication.urls')),
     path('api/wallet/', include('wallet.urls')),
     path('api/recharge/', include('recharge.urls')),
     path('api/admin/', include('admin_panel.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
