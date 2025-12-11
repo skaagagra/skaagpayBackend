@@ -11,3 +11,4 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=15)
+    full_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
