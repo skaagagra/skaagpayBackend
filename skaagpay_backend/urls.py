@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/wallet/', include('wallet.urls')),
     path('api/recharge/', include('recharge.urls')),
+    path('api/admin/', include('admin_panel.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
