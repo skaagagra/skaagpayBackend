@@ -9,7 +9,7 @@ def topup_notification(sender, instance, created, **kwargs):
         # Notify Admins of new request
         send_to_admins(
             title="New TopUp Request",
-            body=f"User {instance.user_phone} requested ₹{instance.amount}",
+            body=f"User {instance.user.phone_number} requested ₹{instance.amount}",
             data={'type': 'topup', 'id': str(instance.id)}
         )
     else:
