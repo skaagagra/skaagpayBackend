@@ -12,10 +12,12 @@ class Transaction(models.Model):
     TRANSACTION_TYPES = (
         ('CREDIT', 'Credit'),
         ('DEBIT', 'Debit'),
+        ('TRANSFER_SENT', 'Transfer Sent'),
+        ('TRANSFER_RECEIVED', 'Transfer Received'),
     )
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
+    transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -36,10 +36,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    custom_user_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
+
     objects = UserManager()
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = ['full_name']
+
+    def save(self, *args, **kwargs):
+        if not self.custom_user_id and self.phone_number:
+            self.custom_user_id = f"{self.phone_number}@skaag"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.phone_number

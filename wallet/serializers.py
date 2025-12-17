@@ -18,3 +18,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
+
+class TransferSerializer(serializers.Serializer):
+    recipient_id = serializers.CharField(max_length=50)
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    description = serializers.CharField(max_length=255, required=False, allow_blank=True)

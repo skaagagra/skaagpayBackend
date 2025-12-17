@@ -9,8 +9,19 @@ class RechargeRequest(models.Model):
         ('FAILED', 'Failed'),
         ('SCHEDULED', 'Scheduled'),
     )
+    CATEGORY_CHOICES = (
+        ('MOBILE_PREPAID', 'Mobile Prepaid'),
+        ('MOBILE_POSTPAID', 'Mobile Postpaid'),
+        ('DTH', 'DTH'),
+        ('BROADBAND', 'Broadband'),
+        ('ELECTRICITY', 'Electricity'),
+        ('GAS', 'Gas'),
+        ('WATER', 'Water'),
+        ('OTHER', 'Other'),
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='recharge_requests')
-    mobile_number = models.CharField(max_length=15)
+    mobile_number = models.CharField(max_length=30) # Increased to support various consumer IDs
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='MOBILE_PREPAID')
     operator = models.CharField(max_length=50) # In real app, this might be a ForeignKey to an Operator model
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_scheduled = models.BooleanField(default=False)
