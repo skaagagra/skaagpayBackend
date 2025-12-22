@@ -6,4 +6,5 @@ urlpatterns = [
     path('topup/', TopUpRequestListCreateView.as_view(), name='wallet-topup'),
     path('transactions/', TransactionListView.as_view(), name='wallet-transactions'),
     path('transfer/', WalletTransferView.as_view(), name='wallet-transfer'),
+    path('transactions/transfer/', WalletTransferView.as_view(), name='wallet-transactions-transfer'),
 ]
