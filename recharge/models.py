@@ -32,3 +32,11 @@ class RechargeRequest(models.Model):
 
     def __str__(self):
         return f"Recharge: {self.mobile_number} ({self.operator}) - {self.amount} - {self.status}"
+
+class Operator(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=RechargeRequest.CATEGORY_CHOICES)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} ({self.category})"

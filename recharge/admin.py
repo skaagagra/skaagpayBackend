@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import RechargeRequest
+from .models import RechargeRequest, Operator
+
+@admin.register(Operator)
+class OperatorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'is_default')
+    list_filter = ('category', 'is_default')
+    search_fields = ('name',)
+
 
 @admin.register(RechargeRequest)
 class RechargeRequestAdmin(admin.ModelAdmin):

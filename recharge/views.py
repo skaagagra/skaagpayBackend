@@ -1,9 +1,9 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from django.db import transaction as db_transaction
 from django.shortcuts import get_object_or_404
-from .models import RechargeRequest
-from .serializers import RechargeRequestSerializer
+from .models import RechargeRequest, Operator
+from .serializers import RechargeRequestSerializer, OperatorSerializer
 from authentication.models import User
 from wallet.models import Wallet, Transaction
 
@@ -72,3 +72,14 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
             )
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class OperatorListView(generics.ListAPIView):
+    serializer_class = OperatorSerializer
+    permission_classes = [permissions.AllowAny] # Or IsAuthenticated depending on need, sticking to open for now as other views imply loose auth
+
+    def get_queryset(self):
+        category = self.request.query_params.get('category')
+        if category:
+            return Operator.objects.filter(category=category)
+        return Operator.objects.all()
+

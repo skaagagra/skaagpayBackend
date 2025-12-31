@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import RechargeRequest
+from .models import RechargeRequest, Operator
+
+class OperatorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Operator
+        fields = ('id', 'name', 'category', 'is_default')
+
+
 
 class RechargeRequestSerializer(serializers.ModelSerializer):
     class Meta:
