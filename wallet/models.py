@@ -25,6 +25,10 @@ class Transaction(models.Model):
     operator_name = models.CharField(max_length=100, blank=True, null=True)
     operator_logo = models.URLField(max_length=500, blank=True, null=True)
     
+    # Links to original requests
+    recharge_request = models.ForeignKey('recharge.RechargeRequest', on_delete=models.SET_NULL, null=True, blank=True, related_name='transactions')
+    topup_request = models.ForeignKey('wallet.TopUpRequest', on_delete=models.SET_NULL, null=True, blank=True, related_name='transactions')
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

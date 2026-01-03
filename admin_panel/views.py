@@ -132,7 +132,9 @@ class AdminTopUpActionView(views.APIView, AdminUserMixin):
                     wallet=wallet,
                     amount=topup.amount,
                     transaction_type='CREDIT',
-                    description=f"TopUp Approved: {topup.id}"
+                    description=f"TopUp Approved: {topup.id}",
+                    status='SUCCESS',
+                    topup_request=topup
                 )
 
             return Response({'message': 'TopUp Approved'})
@@ -175,6 +177,11 @@ class AdminRechargeUpdateView(views.APIView, AdminUserMixin):
             
         recharge.status = new_status
         recharge.save()
+
+        # Update associated Transaction status
+        from wallet.models import Transaction
+        Transaction.objects.filter(recharge_request=recharge).update(status=new_status)
+        
         return Response({'message': 'Recharge status updated'})
 
 # --- User Management Views ---

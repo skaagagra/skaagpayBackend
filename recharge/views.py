@@ -61,16 +61,30 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
             wallet.balance = float(wallet.balance) - float(total_deduction)
             wallet.save()
             
+            # Create Recharge Request
+            instance = serializer.save(user=user, platform_fee=platform_fee, total_amount=total_deduction)
+            
+            # Get Operator Logo if available
+            op_logo = None
+            op_name = instance.operator
+            try:
+                op_obj = Operator.objects.filter(name=instance.operator, category=instance.category).first()
+                if op_obj:
+                    op_logo = op_obj.logo_url
+            except:
+                pass
+
             # Log Transaction
             Transaction.objects.create(
                 wallet=wallet,
                 amount=total_deduction,
                 transaction_type='DEBIT',
-                description=f"Recharge for {serializer.validated_data['mobile_number']} (Fee: {platform_fee})"
+                description=f"Recharge for {instance.mobile_number}",
+                status='PENDING',
+                operator_name=op_name,
+                operator_logo=op_logo,
+                recharge_request=instance
             )
-            
-            # Create Recharge Request
-            instance = serializer.save(user=user, platform_fee=platform_fee, total_amount=total_deduction)
             
             # Notify Admin
             from common.notifications import send_admin_notification
