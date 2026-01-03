@@ -18,7 +18,30 @@ class RechargeRequestAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if change:
             original_obj = RechargeRequest.objects.get(pk=obj.pk)
+            
+            # Status Change Logic
             if original_obj.status != obj.status:
+                
+                # Check for Failure & Refund
+                if obj.status == 'FAILED' and original_obj.status != 'FAILED':
+                   from django.db import transaction as db_transaction
+                   from wallet.models import Wallet, Transaction
+                   
+                   with db_transaction.atomic():
+                       # 1. Credit Wallet
+                       wallet, _ = Wallet.objects.get_or_create(user=obj.user)
+                       refund_amount = obj.total_amount if obj.total_amount > 0 else obj.amount
+                       wallet.balance = float(wallet.balance) + float(refund_amount)
+                       wallet.save()
+                       
+                       # 2. Log Credit Transaction
+                       Transaction.objects.create(
+                           wallet=wallet,
+                           amount=refund_amount,
+                           transaction_type='CREDIT',
+                           description=f"Refund for Failed Recharge: {obj.mobile_number}"
+                       )
+                
                 # Notify User
                 from common.notifications import send_user_notification
                 send_user_notification(

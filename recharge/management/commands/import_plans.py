@@ -1,3 +1,4 @@
+y
 import pandas as pd
 from django.core.management.base import BaseCommand
 from recharge.models import Plan, Operator
