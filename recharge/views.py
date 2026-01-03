@@ -36,9 +36,9 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
         scheduled_at = serializer.validated_data.get('scheduled_at')
         category = serializer.validated_data.get('category', 'MOBILE_PREPAID')
         
-        # Calculate Platform Fee (3% for Prepaid, GAS, DTH)
+        # Calculate Platform Fee (3% for Postpaid, GAS, DTH) - Prepaid is FREE
         platform_fee = 0
-        if category in ['MOBILE_PREPAID', 'GAS', 'DTH']:
+        if category in ['MOBILE_POSTPAID', 'GAS', 'DTH']:
             try:
                 platform_fee = float(amount) * 0.03
             except:
