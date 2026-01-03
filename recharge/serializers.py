@@ -4,7 +4,7 @@ from .models import RechargeRequest, Operator
 class OperatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Operator
-        fields = ('id', 'name', 'category', 'is_default')
+        fields = ('id', 'name', 'category', 'logo_url', 'is_default')
 
 
 
