@@ -13,9 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_STORAGE is now handled in the STORAGES setting at the end of the file
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -155,44 +152,3 @@ CORS_ALLOWED_ORIGINS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# --- S3 Storage Configuration ---
-AWS_ACCESS_KEY_ID = os.environ.get('S3_ACCESS_KEY')
-
-# Debug print to verify .env is loaded (will show in terminal)
-print(f"DEBUG: S3_ACCESS_KEY found: {bool(AWS_ACCESS_KEY_ID)}")
-
-if AWS_ACCESS_KEY_ID:
-    if 'storages' not in INSTALLED_APPS:
-        INSTALLED_APPS += ['storages']
-        
-    AWS_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'apks')
-    AWS_S3_ENDPOINT_URL = os.environ.get('S3_ENDPOINT')
-    AWS_S3_REGION_NAME = os.environ.get('S3_REGION', 'ap-northeast-1')
-    
-    # Supabase S3 specifics
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_DEFAULT_ACL = None 
-    AWS_S3_VERIFY = True
-    AWS_QUERYSTRING_AUTH = False 
-    
-    # Modern Django Storages Configuration (Preferred for Django 4.2+)
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        },
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        },
-    }
-else:
-    # Fallback to local storage if S3 keys are missing
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        },
-    }
