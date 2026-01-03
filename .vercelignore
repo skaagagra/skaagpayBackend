@@ -1,0 +1,12 @@
+media/
+staticfiles/
+myenv/
+.git/
+*.sqlite3
+__pycache__/
+.env
+serviceAccountKey.json
+seed_logos.py
+recharge_plans.xlsx
+API_PAYLOADS.md
+README.md

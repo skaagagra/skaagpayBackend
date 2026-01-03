@@ -18,3 +18,4 @@ staticfiles/
 
 # Secrets
 serviceAccountKey.json
+.env
