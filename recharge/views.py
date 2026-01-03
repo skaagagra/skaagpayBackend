@@ -34,41 +34,49 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
         amount = serializer.validated_data['amount']
         is_scheduled = serializer.validated_data.get('is_scheduled', False)
         scheduled_at = serializer.validated_data.get('scheduled_at')
-
-        if is_scheduled and not scheduled_at:
-             return Response({'error': 'scheduled_at is required when is_scheduled is True'}, status=status.HTTP_400_BAD_REQUEST)
+        category = serializer.validated_data.get('category', 'MOBILE_PREPAID')
         
-        # If Scheduled, just save and return. DEDUCTION HAPPENS LATER.
+        # Calculate Platform Fee (3% for Prepaid, GAS, DTH)
+        platform_fee = 0
+        if category in ['MOBILE_PREPAID', 'GAS', 'DTH']:
+            try:
+                platform_fee = float(amount) * 0.03
+            except:
+                platform_fee = 0
+            
+        total_deduction = float(amount) + platform_fee
+        
+        # If Scheduled, just save and return. DEDUCTION HAPPENS LATER (Need to handle fee there too, but out of scope for now)
         if is_scheduled:
-             serializer.save(user=user, status='SCHEDULED')
+             serializer.save(user=user, status='SCHEDULED', platform_fee=platform_fee, total_amount=total_deduction)
              return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         # Check Wallet Balance
         with db_transaction.atomic():
             wallet, created = Wallet.objects.get_or_create(user=user)
-            if wallet.balance < amount:
-                return Response({'error': 'Insufficient wallet balance'}, status=status.HTTP_400_BAD_REQUEST)
+            if wallet.balance < total_deduction:
+                return Response({'error': f'Insufficient wallet balance. Required: {total_deduction}'}, status=status.HTTP_400_BAD_REQUEST)
             
             # Deduct Balance
-            wallet.balance -= amount
+            wallet.balance = float(wallet.balance) - float(total_deduction)
             wallet.save()
             
             # Log Transaction
             Transaction.objects.create(
                 wallet=wallet,
-                amount=amount,
+                amount=total_deduction,
                 transaction_type='DEBIT',
-                description=f"Recharge for {serializer.validated_data['mobile_number']}"
+                description=f"Recharge for {serializer.validated_data['mobile_number']} (Fee: {platform_fee})"
             )
             
             # Create Recharge Request
-            instance = serializer.save(user=user)
+            instance = serializer.save(user=user, platform_fee=platform_fee, total_amount=total_deduction)
             
             # Notify Admin
             from common.notifications import send_admin_notification
             send_admin_notification(
                 title="New Recharge Request",
-                body=f"Recharge {instance.amount} for {instance.mobile_number}"
+                body=f"Recharge {instance.amount} (+{platform_fee} fee) for {instance.mobile_number}"
             )
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)

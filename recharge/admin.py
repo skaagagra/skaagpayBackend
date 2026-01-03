@@ -10,7 +10,7 @@ class OperatorAdmin(admin.ModelAdmin):
 
 @admin.register(RechargeRequest)
 class RechargeRequestAdmin(admin.ModelAdmin):
-    list_display = ('user', 'mobile_number', 'operator', 'amount', 'status', 'created_at')
+    list_display = ('user', 'mobile_number', 'operator', 'amount', 'platform_fee', 'total_amount', 'status', 'created_at')
     list_filter = ('status', 'operator', 'created_at')
     search_fields = ('user__phone_number', 'mobile_number')
     list_editable = ('status',) # Allow admin to quickly change status from list view

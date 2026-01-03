@@ -24,6 +24,8 @@ class RechargeRequest(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='MOBILE_PREPAID')
     operator = models.CharField(max_length=50) # In real app, this might be a ForeignKey to an Operator model
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    platform_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_scheduled = models.BooleanField(default=False)
     scheduled_at = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
@@ -53,14 +55,14 @@ class Plan(models.Model):
     
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE, related_name='plans')
     amount = models.DecimalField(max_digits=10, decimal_places=2) # Price
-    data = models.CharField(max_length=100, blank=True, null=True) # Data
-    validity = models.CharField(max_length=100, blank=True, null=True) # Validity
+    data = models.CharField(max_length=500, blank=True, null=True) # Data
+    validity = models.CharField(max_length=500, blank=True, null=True) # Validity
     additional_benefits = models.TextField(blank=True, null=True) # Additional Benefits
     plan_type = models.CharField(max_length=20, choices=PLAN_TYPES, default='OTHER')
     
     # Optional fields for future proofing or explicit filtering
     circle = models.CharField(max_length=100, default='ALL') 
-    talktime = models.CharField(max_length=100, blank=True, null=True)
+    talktime = models.CharField(max_length=500, blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
