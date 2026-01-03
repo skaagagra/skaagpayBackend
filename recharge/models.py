@@ -38,6 +38,7 @@ class RechargeRequest(models.Model):
 class Operator(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=20, choices=RechargeRequest.CATEGORY_CHOICES)
+    logo_url = models.URLField(max_length=500, blank=True, null=True)
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
