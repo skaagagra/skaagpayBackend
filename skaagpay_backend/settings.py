@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'wallet',
     'recharge',
     'admin_panel',
+    'app_management',
 ]
 
 MIDDLEWARE = [

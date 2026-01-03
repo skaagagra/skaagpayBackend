@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkaagPay - Fast & Secure Payments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0F172A;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary-color: #3B82F6;
+            --accent-color: #60A5FA;
+            --text-color: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05), transparent);
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .logo {
+            height: 120px;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero {
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--primary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .update-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.8s ease-out 0.4s both;
+        }
+
+        .version-info {
+            margin-bottom: 2rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-color);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .release-notes {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: left;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            background: #2563EB;
+            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.5);
+        }
+
+        .download-btn svg {
+            margin-right: 10px;
+        }
+
+        .no-update {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            animation: fadeIn 1.5s ease-out 0.6s both;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Decorative blobs */
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--primary-color);
+            filter: blur(100px);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            top: -100px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            bottom: -100px;
+            left: -100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container">
+        <img src="{% static 'app_management/images/logo.png' %}" alt="SkaagPay Logo" class="logo">
+
+        <div class="hero">
+            <h1>SkaagPay</h1>
+            <p class="tagline">Next-Generation Mobile Payments & Recharges</p>
+        </div>
+
+        <div class="update-card">
+            {% if latest_version %}
+            <div class="version-info">
+                <span class="version-badge">Latest Version: v{{ latest_version.version_name }}</span>
+                <p style="margin-bottom: 0.5rem; font-weight: 600;">Download official Android app</p>
+                {% if latest_version.release_notes %}
+                <div class="release-notes">
+                    <strong style="display: block; color: var(--text-color); margin-bottom: 0.5rem;">What's
+                        New:</strong>
+                    {{ latest_version.release_notes|linebreaksbr }}
+                </div>
+                {% endif %}
+            </div>
+
+            <a href="{{ latest_version.apk_file.url }}" class="download-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download APK
+            </a>
+            {% else %}
+            <p class="no-update">No app versions available for download yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            &copy; 2026 SkaagPay. All rights reserved. <br>
+            Checking for APIs? Visit <a href="/doc/">Documentation</a>
+        </div>
+    </div>
+</body>
+
+</html>
