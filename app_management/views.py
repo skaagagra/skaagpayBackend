@@ -29,7 +29,7 @@ class LatestAppVersionView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         if not instance:
-            return Response({'error': 'No version found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'No version available', 'version_code': 0}, status=status.HTTP_200_OK)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
