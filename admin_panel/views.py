@@ -151,7 +151,11 @@ class AdminRechargeListView(generics.ListAPIView, AdminUserMixin):
     serializer_class = RechargeRequestSerializer
 
     def get_queryset(self):
-        return RechargeRequest.objects.all().order_by('-created_at')
+        queryset = RechargeRequest.objects.all().order_by('-created_at')
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            queryset = queryset.filter(status=status_param.upper())
+        return queryset
 
     def list(self, request, *args, **kwargs):
         if not self.get_admin_user():
