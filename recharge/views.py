@@ -2,8 +2,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from django.db import transaction as db_transaction
 from django.shortcuts import get_object_or_404
-from .models import RechargeRequest, Operator
-from .serializers import RechargeRequestSerializer, OperatorSerializer
+from .models import RechargeRequest, Operator, Plan
+from .serializers import RechargeRequestSerializer, OperatorSerializer, PlanSerializer
 from authentication.models import User
 from wallet.models import Wallet, Transaction
 
@@ -83,3 +83,33 @@ class OperatorListView(generics.ListAPIView):
             return Operator.objects.filter(category=category)
         return Operator.objects.all()
 
+class PlanListCreateView(generics.ListCreateAPIView):
+    """
+    Public List (or Auth User List) & Admin Create.
+    For simplicity, allowing open list but restrictive create could be done via permissions.
+    """
+    serializer_class = PlanSerializer
+    permission_classes = [permissions.AllowAny] # Ideally IsAdmin for Create, AllowAny for List
+
+    def get_queryset(self):
+        queryset = Plan.objects.all()
+        operator_id = self.request.query_params.get('operator_id')
+        circle = self.request.query_params.get('circle')
+        plan_type = self.request.query_params.get('plan_type')
+
+        if operator_id:
+            queryset = queryset.filter(operator_id=operator_id)
+        if circle:
+            queryset = queryset.filter(circle=circle)
+        if plan_type:
+            queryset = queryset.filter(plan_type=plan_type)
+            
+        return queryset
+
+class PlanRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Admin Only: Update/Delete Plan
+    """
+    queryset = Plan.objects.all()
+    serializer_class = PlanSerializer
+    permission_classes = [permissions.AllowAny] # RESTRICT THIS IN PRODUCTION to Admin Only

@@ -18,3 +18,12 @@ class RechargeRequestSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Amount must be positive")
         return value
+
+from .models import Plan
+
+class PlanSerializer(serializers.ModelSerializer):
+    operator_name = serializers.CharField(source='operator.name', read_only=True)
+    
+    class Meta:
+        model = Plan
+        fields = '__all__'

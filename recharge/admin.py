@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RechargeRequest, Operator
+from .models import RechargeRequest, Operator, Plan
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
@@ -27,3 +27,9 @@ class RechargeRequestAdmin(admin.ModelAdmin):
                     body=f"Your recharge for {obj.mobile_number} is now {obj.status}."
                 )
         super().save_model(request, obj, form, change)
+
+@admin.register(Plan)
+class PlanAdmin(admin.ModelAdmin):
+    list_display = ('operator', 'amount', 'data', 'validity', 'plan_type', 'circle', 'talktime', 'created_at')
+    list_filter = ('operator', 'plan_type', 'circle', 'created_at')
+    search_fields = ('operator__name', 'plan_type', 'circle')
