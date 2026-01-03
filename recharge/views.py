@@ -100,7 +100,7 @@ class PlanListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny] # Ideally IsAdmin for Create, AllowAny for List
 
     def get_queryset(self):
-        queryset = Plan.objects.all()
+        queryset = Plan.objects.select_related('operator').all()
         operator_id = self.request.query_params.get('operator_id')
         circle = self.request.query_params.get('circle')
         plan_type = self.request.query_params.get('plan_type')
