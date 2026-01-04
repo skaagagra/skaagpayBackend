@@ -14,7 +14,7 @@ class RechargeRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RechargeRequest
-        fields = ('id', 'user_id', 'user_name', 'mobile_number', 'category', 'operator', 'amount', 'status', 'is_scheduled', 'scheduled_at', 'created_at')
+        fields = ('id', 'user_id', 'user_name', 'mobile_number', 'category', 'operator', 'costumer_name', 'amount', 'status', 'is_scheduled', 'scheduled_at', 'created_at')
         read_only_fields = ('id', 'status', 'created_at')
 
     def validate_amount(self, value):

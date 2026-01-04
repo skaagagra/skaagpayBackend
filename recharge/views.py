@@ -84,6 +84,7 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
                 operator_name=op_name,
                 operator_logo=op_logo,
                 target_number=instance.mobile_number,
+                target_name=instance.costumer_name,
                 recharge_request=instance
             )
             

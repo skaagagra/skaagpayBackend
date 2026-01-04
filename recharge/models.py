@@ -22,7 +22,8 @@ class RechargeRequest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='recharge_requests')
     mobile_number = models.CharField(max_length=30) # Increased to support various consumer IDs
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='MOBILE_PREPAID')
-    operator = models.CharField(max_length=50) # In real app, this might be a ForeignKey to an Operator model
+    operator = models.CharField(max_length=50)
+    costumer_name = models.CharField(max_length=100, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     platform_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
