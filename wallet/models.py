@@ -24,6 +24,7 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20, default='SUCCESS') # SUCCESS, PENDING, FAILED
     operator_name = models.CharField(max_length=100, blank=True, null=True)
     operator_logo = models.URLField(max_length=500, blank=True, null=True)
+    target_number = models.CharField(max_length=100, blank=True, null=True)
     
     # Links to original requests
     recharge_request = models.ForeignKey('recharge.RechargeRequest', on_delete=models.SET_NULL, null=True, blank=True, related_name='transactions')
