@@ -80,9 +80,10 @@ class RechargeListCreateView(generics.ListCreateAPIView, UserParamsMixin):
                 amount=total_deduction,
                 transaction_type='DEBIT',
                 description=f"Recharge for {instance.mobile_number}",
-                status='PENDING',
+                status='PROCESSING',
                 operator_name=op_name,
                 operator_logo=op_logo,
+                target_number=instance.mobile_number,
                 recharge_request=instance
             )
             
